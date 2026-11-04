@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#2a0f45"/><stop offset=".55" stop-color="#0f0a1a"/><stop offset="1" stop-color="#07050c"/>
+    </radialGradient>
+    <radialGradient id="glass" cx="50%" cy="45%" r="65%">
+      <stop offset="0" stop-color="#1b2a3f"/><stop offset=".7" stop-color="#0a0714"/><stop offset="1" stop-color="#05030a"/>
+    </radialGradient>
+    <radialGradient id="iris" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".18" stop-color="#ff8aa0"/><stop offset=".45" stop-color="#ff2a4d"/><stop offset="1" stop-color="#5a0618"/>
+    </radialGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="scan" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="3" fill="#000" opacity=".35"/></pattern>
+    <clipPath id="scr"><rect x="112" y="128" width="288" height="224" rx="44"/></clipPath>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <!-- CRT body -->
+  <rect x="82" y="100" width="348" height="284" rx="64" fill="#140c22" stroke="#2a1745" stroke-width="6"/>
+  <!-- chromatic split bezel -->
+  <rect x="106" y="122" width="300" height="236" rx="50" fill="none" stroke="#ff2a4d" stroke-width="7" transform="translate(-5 0)" opacity=".9" filter="url(#glow)"/>
+  <rect x="106" y="122" width="300" height="236" rx="50" fill="none" stroke="#19f0ff" stroke-width="7" transform="translate(5 0)" opacity=".9" filter="url(#glow)"/>
+  <!-- glass -->
+  <rect x="112" y="128" width="288" height="224" rx="44" fill="url(#glass)"/>
+  <g clip-path="url(#scr)">
+    <!-- eye -->
+    <path d="M150 240 Q256 150 362 240 Q256 330 150 240Z" fill="#07050c" stroke="#19f0ff" stroke-width="8" filter="url(#glow)"/>
+    <circle cx="256" cy="240" r="52" fill="url(#iris)" filter="url(#glow)"/>
+    <rect x="249" y="204" width="14" height="72" rx="7" fill="#07050c"/>
+    <circle cx="276" cy="222" r="8" fill="#fff" opacity=".85"/>
+    <!-- glitch slices -->
+    <rect x="112" y="196" width="120" height="6" fill="#19f0ff" opacity=".55"/>
+    <rect x="300" y="268" width="100" height="5" fill="#ff2a4d" opacity=".6"/>
+    <rect x="140" y="300" width="60" height="4" fill="#c6ff1a" opacity=".5"/>
+    <rect x="112" y="128" width="288" height="224" fill="url(#scan)"/>
+  </g>
+  <!-- glass glare -->
+  <path d="M130 150 Q200 136 260 140" stroke="#fff" stroke-opacity=".18" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <!-- stand -->
+  <path d="M206 384 L306 384 L326 412 L186 412Z" fill="#140c22" stroke="#2a1745" stroke-width="5"/>
+  <!-- status LED + label -->
+  <circle cx="392" cy="372" r="6" fill="#c6ff1a" filter="url(#glow)"/>
+  <text x="256" y="452" text-anchor="middle" font-family="'Chakra Petch','Arial Narrow',sans-serif" font-weight="700" font-size="44" letter-spacing="10" fill="#e8e3f0">CER-01</text>
+</svg>
