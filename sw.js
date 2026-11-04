@@ -1,6 +1,6 @@
 /* CER-01 service worker: makes the site installable and keeps the last-seen pages for offline use.
    Network first (the site changes often), cache as fallback. Bump VERSION to drop old caches. */
-const VERSION='cer-01-v1';
+const VERSION='cer-01-v2';
 const CORE=['./','./index.html','./fr.html','./setup.html','./setup-fr.html','./manifest.webmanifest','./manifest-fr.webmanifest',
   './icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png','./icons/apple-touch-icon.png','./icons/favicon-32.png','./icons/cer-logo.svg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(CORE)).catch(()=>{}));self.skipWaiting()});
