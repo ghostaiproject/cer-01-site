@@ -388,6 +388,8 @@ h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--li
 .pv-hero h3{margin:4px 0 10px;font:400 clamp(34px,7vw,64px)/1 var(--f-display);color:var(--bone);text-shadow:3px 0 var(--blood),-3px 0 var(--acid);overflow-wrap:anywhere}
 .pv-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .pv-meta .chip{position:relative;top:auto;right:auto}
+.chip.np{top:38px}.pv-meta .chip.np{top:auto}
+.pv-np{margin-top:10px}.pv-np .chip{position:relative;top:auto;right:auto;display:inline-block}
 .pv-d{margin:14px 0 0;max-width:72ch}
 .pv-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px;margin-top:14px}
 @media(max-width:760px){.pv-grid{grid-template-columns:minmax(0,1fr)}}
@@ -961,7 +963,7 @@ var P=[
   nv:'Le dernier run d’alerte attend une approbation dans Actions. Aucune alerte ne part avant.',
   tu:[['/load window','Montre d’abord le dernier run d’alerte.'],['/test main','Lance le workflow pour main, une maison ou toutes.'],['/homes','Liste les maisons par nom, jamais leurs codes.'],['/ship','pytest, rebuild du skill si alert.py a changé, push : main est en prod.']],
   cm:['/load window','/test','/homes','/ship']},
- {no:'03',sh:[['folio-today','Today · computer','d'],['folio-demo','Guided demo','d'],['folio-eng','Engagements','d'],['folio-yearend','Year-end file','d'],['folio-calendar','Calendar','d'],['folio-lock','Lock','d'],['folio-cloud','Drive sync','d'],['folio-phone','Today · phone','p']],n:'Folio',lg:'solva',c:'#b7cfa3',img:'var(--solva)',kind:'CPA firm app',repo:'ghostaiproject/ledger-mockup',ver:'main · 590b867',st:'building',sc:'#ffb01a',
+ {no:'03',sh:[['folio-today','Today · computer','d'],['folio-demo','Guided demo','d'],['folio-eng','Engagements','d'],['folio-yearend','Year-end file','d'],['folio-calendar','Calendar','d'],['folio-lock','Lock','d'],['folio-cloud','Drive sync','d'],['folio-phone','Today · phone','p']],n:'Folio',lg:'solva',c:'#b7cfa3',img:'var(--solva)',kind:'CPA firm app',repo:'ghostaiproject/ledger-mockup',ver:'main · 590b867',st:'building',sc:'#ffb01a',np:'non disponible au public',
   d:'Folio (ex-Solva) : poste de travail pour un cabinet CPA du Québec, maintenant une app Tauri pour Windows et Android avec coffre chiffré et synchro Google Drive.',
   b:['Cabinet : mandats avec étapes, dossier de fin d’année avec écritures de régularisation et approbations, demandes aux clients, temps et facturation, révision et calendrier.','Verrou : coffre local chiffré, Windows Hello ou verrou du téléphone d’abord, phrase secrète en secours, verrouillage après 10 min d’inactivité.','Nuage : synchro chiffrée à 3 voies dans votre propre Google Drive, panneau des conflits pour restaurer ou ignorer.','Builds : .msi/.exe Windows et .apk Android non signés depuis la CI ; look vert forêt chaud.'],
   nv:'La synchro Drive attend un client OAuth Google et n’a pas encore été essayée sur le vrai Google.',
@@ -989,7 +991,7 @@ function picStyle(p){return p.img?'--img:'+p.img+(p.bp?';--bp:'+p.bp+';--bs:'+p.
 var prj=document.getElementById('projects');
 prj.innerHTML=ALL.map(function(p,i){var slot=p===SLOT;
   return '<article class="proj'+(slot?' slot':'')+'" style="--c:'+p.c+'" data-i="'+i+'"><div class="pic" style="'+picStyle(p)+'">'+(slot?'+':'<i></i>')
-   +'<span class="chip" style="--s:'+p.sc+'">'+esc(p.st)+'</span><span class="pno">unité '+p.no+'</span></div>'
+   +'<span class="chip" style="--s:'+p.sc+'">'+esc(p.st)+'</span>'+(p.np?'<span class="chip np" style="--s:#ff2a4d">'+esc(p.np)+'</span>':'')+'<span class="pno">unité '+p.no+'</span></div>'
    +'<div class="pbody"><div class="ptag">'+esc(p.kind)+'</div><h3>'+esc(p.n)+'</h3><div><span class="ver">'+esc(p.ver)+'</span></div><p class="pd">'+esc(p.d)+'</p>'
    +'<figure class="spark" data-lg="'+(p.lg||'')+'"></figure><button type="button" class="go">'+(p.map?'Ouvrir la carte':slot?'Comment ajouter':'Ouvrir l’unité')+' &rarr;</button></div></article>'}).join('');
 
@@ -1007,7 +1009,7 @@ function pvGrid(p){
    +p.b.map(function(x,i){return '<li style="--i:'+i+'">'+esc(x)+'</li>'}).join('')+'</ul>'+(p.nv?'<p class="nv">'+esc(p.nv)+'</p>':'')+'</section>'
    +'<section class="pv-box" style="--c:'+p.c+'"><h4>Tuto rapide</h4><ol class="tsteps">'+p.tu.map(function(x){return '<li><span class="cmd">'+esc(x[0])+'</span> '+esc(x[1])+'</li>'}).join('')+'</ol>'
    +'<h4>Commandes</h4><div class="cmds">'+p.cm.map(function(c){return '<span class="cmd">'+esc(c)+'</span>'}).join('')+'</div></section></div>'
-   +(p.sh?'<section class="pv-box pv-shots" style="--c:'+p.c+'"><h4>Écrans <em>touchez pour ouvrir</em></h4><div class="shots">'+p.sh.map(function(x,i){return '<button type="button" class="shot '+x[2]+'" data-shot="'+i+'" style="--img:var(--shot-'+x[0]+')" aria-label="'+esc(x[1])+'"><span>'+esc(x[1])+'</span></button>'}).join('')+'</div></section>':'')}
+   +(p.sh?'<section class="pv-box pv-shots" style="--c:'+p.c+'"><h4>Écrans <em>touchez pour ouvrir</em></h4><div class="shots">'+p.sh.map(function(x,i){return '<button type="button" class="shot '+x[2]+'" data-shot="'+i+'" style="--img:var(--shot-'+x[0]+')" aria-label="'+esc(x[1])+'"><span>'+esc(x[1])+'</span></button>'}).join('')+'</div>'+(p.np?'<div class="pv-np">'+(p.np?'<span class="chip np" style="--s:#ff2a4d">'+esc(p.np)+'</span>':'')+'</div>':'')+'</section>':'')}
 // screen viewer: a tap on a unit screen opens it full size, arrows/swipe step through
 var lb=document.createElement('div');lb.id='lb';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');
 lb.innerHTML='<button type="button" class="lb-x" aria-label="Fermer">&times;</button><div class="lb-img"></div><div class="lb-bar"><button type="button" class="lb-p" aria-label="Previous">&lsaquo;</button><span class="lb-t"></span><button type="button" class="lb-n" aria-label="Next">&rsaquo;</button></div>';
@@ -1028,7 +1030,7 @@ function fillPj(p){
   winPj.style.setProperty('--c',p.c);
   document.getElementById('pj-bar').innerHTML='<b>unité '+p.no+'</b> · '+esc(p.n.toLowerCase())+'.exe // '+esc(p.kind);
   document.getElementById('pj-body').innerHTML='<div class="pv-hero" style="'+picStyle(p)+'"><i></i><div><div class="ptag" style="--c:'+p.c+'">unité '+p.no+' // '+esc(p.kind)+'</div>'
-   +'<h3 id="pj-title" class="glitch">'+esc(p.n)+'</h3><div class="pv-meta"><span class="chip" style="--s:'+p.sc+'">'+esc(p.st)+'</span><span class="ver" style="--c:'+p.c+'">'+esc(p.ver)+'</span>'
+   +'<h3 id="pj-title" class="glitch">'+esc(p.n)+'</h3><div class="pv-meta"><span class="chip" style="--s:'+p.sc+'">'+esc(p.st)+'</span>'+(p.np?'<span class="chip np" style="--s:#ff2a4d">'+esc(p.np)+'</span>':'')+'<span class="ver" style="--c:'+p.c+'">'+esc(p.ver)+'</span>'
    +(p.repo?'<span class="repo">'+esc(p.repo)+'</span>':'')+'</div></div></div><p class="pv-d">'+esc(p.d)+'</p>'+pvGrid(p);
   return winPj}
 

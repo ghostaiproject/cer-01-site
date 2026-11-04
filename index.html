@@ -388,6 +388,8 @@ h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--li
 .pv-hero h3{margin:4px 0 10px;font:400 clamp(34px,7vw,64px)/1 var(--f-display);color:var(--bone);text-shadow:3px 0 var(--blood),-3px 0 var(--acid);overflow-wrap:anywhere}
 .pv-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .pv-meta .chip{position:relative;top:auto;right:auto}
+.chip.np{top:38px}.pv-meta .chip.np{top:auto}
+.pv-np{margin-top:10px}.pv-np .chip{position:relative;top:auto;right:auto;display:inline-block}
 .pv-d{margin:14px 0 0;max-width:72ch}
 .pv-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px;margin-top:14px}
 @media(max-width:760px){.pv-grid{grid-template-columns:minmax(0,1fr)}}
@@ -961,7 +963,7 @@ var P=[
   nv:'Latest alert run is waiting for approval in Actions. Alerts are not going out until it is approved.',
   tu:[['/load window','Shows the last alert run first.'],['/test main','Fires the workflow for main, one home, or all.'],['/homes','Lists the homes by name, never their codes.'],['/ship','pytest, rebuild the skill if alert.py changed, push: main is live.']],
   cm:['/load window','/test','/homes','/ship']},
- {no:'03',sh:[['folio-today','Today · computer','d'],['folio-demo','Guided demo','d'],['folio-eng','Engagements','d'],['folio-yearend','Year-end file','d'],['folio-calendar','Calendar','d'],['folio-lock','Lock','d'],['folio-cloud','Drive sync','d'],['folio-phone','Today · phone','p']],n:'Folio',lg:'solva',c:'#b7cfa3',img:'var(--solva)',kind:'CPA firm app',repo:'ghostaiproject/ledger-mockup',ver:'main · 590b867',st:'building',sc:'#ffb01a',
+ {no:'03',sh:[['folio-today','Today · computer','d'],['folio-demo','Guided demo','d'],['folio-eng','Engagements','d'],['folio-yearend','Year-end file','d'],['folio-calendar','Calendar','d'],['folio-lock','Lock','d'],['folio-cloud','Drive sync','d'],['folio-phone','Today · phone','p']],n:'Folio',lg:'solva',c:'#b7cfa3',img:'var(--solva)',kind:'CPA firm app',repo:'ghostaiproject/ledger-mockup',ver:'main · 590b867',st:'building',sc:'#ffb01a',np:'not available to public',
   d:'Folio (ex-Solva): workbench for a Québec CPA firm, now a Tauri app for Windows and Android with an encrypted vault and Google Drive sync.',
   b:['Firm work: engagements with stage gates, year-end file with AJEs and sign-offs, client requests, time and billing, review and calendar.','Lock: encrypted local vault, Windows Hello or phone lock first, passphrase backup, auto-lock after 10 min idle.','Cloud: encrypted 3-way sync through your own Google Drive, conflicts panel to restore or dismiss.','Builds: unsigned Windows .msi/.exe and Android .apk from CI; warm forest green look.'],
   nv:'Drive sync needs a Google OAuth client and is not tried against real Google yet.',
@@ -989,7 +991,7 @@ function picStyle(p){return p.img?'--img:'+p.img+(p.bp?';--bp:'+p.bp+';--bs:'+p.
 var prj=document.getElementById('projects');
 prj.innerHTML=ALL.map(function(p,i){var slot=p===SLOT;
   return '<article class="proj'+(slot?' slot':'')+'" style="--c:'+p.c+'" data-i="'+i+'"><div class="pic" style="'+picStyle(p)+'">'+(slot?'+':'<i></i>')
-   +'<span class="chip" style="--s:'+p.sc+'">'+esc(p.st)+'</span><span class="pno">unit '+p.no+'</span></div>'
+   +'<span class="chip" style="--s:'+p.sc+'">'+esc(p.st)+'</span>'+(p.np?'<span class="chip np" style="--s:#ff2a4d">'+esc(p.np)+'</span>':'')+'<span class="pno">unit '+p.no+'</span></div>'
    +'<div class="pbody"><div class="ptag">'+esc(p.kind)+'</div><h3>'+esc(p.n)+'</h3><div><span class="ver">'+esc(p.ver)+'</span></div><p class="pd">'+esc(p.d)+'</p>'
    +'<figure class="spark" data-lg="'+(p.lg||'')+'"></figure><button type="button" class="go">'+(p.map?'Open neural map':slot?'How to add':'Open unit')+' &rarr;</button></div></article>'}).join('');
 
@@ -1007,7 +1009,7 @@ function pvGrid(p){
    +p.b.map(function(x,i){return '<li style="--i:'+i+'">'+esc(x)+'</li>'}).join('')+'</ul>'+(p.nv?'<p class="nv">'+esc(p.nv)+'</p>':'')+'</section>'
    +'<section class="pv-box" style="--c:'+p.c+'"><h4>Quick tuto</h4><ol class="tsteps">'+p.tu.map(function(x){return '<li><span class="cmd">'+esc(x[0])+'</span> '+esc(x[1])+'</li>'}).join('')+'</ol>'
    +'<h4>Commands</h4><div class="cmds">'+p.cm.map(function(c){return '<span class="cmd">'+esc(c)+'</span>'}).join('')+'</div></section></div>'
-   +(p.sh?'<section class="pv-box pv-shots" style="--c:'+p.c+'"><h4>Screens <em>tap to open</em></h4><div class="shots">'+p.sh.map(function(x,i){return '<button type="button" class="shot '+x[2]+'" data-shot="'+i+'" style="--img:var(--shot-'+x[0]+')" aria-label="'+esc(x[1])+'"><span>'+esc(x[1])+'</span></button>'}).join('')+'</div></section>':'')}
+   +(p.sh?'<section class="pv-box pv-shots" style="--c:'+p.c+'"><h4>Screens <em>tap to open</em></h4><div class="shots">'+p.sh.map(function(x,i){return '<button type="button" class="shot '+x[2]+'" data-shot="'+i+'" style="--img:var(--shot-'+x[0]+')" aria-label="'+esc(x[1])+'"><span>'+esc(x[1])+'</span></button>'}).join('')+'</div>'+(p.np?'<div class="pv-np">'+(p.np?'<span class="chip np" style="--s:#ff2a4d">'+esc(p.np)+'</span>':'')+'</div>':'')+'</section>':'')}
 // screen viewer: a tap on a unit screen opens it full size, arrows/swipe step through
 var lb=document.createElement('div');lb.id='lb';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');
 lb.innerHTML='<button type="button" class="lb-x" aria-label="Close">&times;</button><div class="lb-img"></div><div class="lb-bar"><button type="button" class="lb-p" aria-label="Previous">&lsaquo;</button><span class="lb-t"></span><button type="button" class="lb-n" aria-label="Next">&rsaquo;</button></div>';
@@ -1028,7 +1030,7 @@ function fillPj(p){
   winPj.style.setProperty('--c',p.c);
   document.getElementById('pj-bar').innerHTML='<b>unit '+p.no+'</b> · '+esc(p.n.toLowerCase())+'.exe // '+esc(p.kind);
   document.getElementById('pj-body').innerHTML='<div class="pv-hero" style="'+picStyle(p)+'"><i></i><div><div class="ptag" style="--c:'+p.c+'">unit '+p.no+' // '+esc(p.kind)+'</div>'
-   +'<h3 id="pj-title" class="glitch">'+esc(p.n)+'</h3><div class="pv-meta"><span class="chip" style="--s:'+p.sc+'">'+esc(p.st)+'</span><span class="ver" style="--c:'+p.c+'">'+esc(p.ver)+'</span>'
+   +'<h3 id="pj-title" class="glitch">'+esc(p.n)+'</h3><div class="pv-meta"><span class="chip" style="--s:'+p.sc+'">'+esc(p.st)+'</span>'+(p.np?'<span class="chip np" style="--s:#ff2a4d">'+esc(p.np)+'</span>':'')+'<span class="ver" style="--c:'+p.c+'">'+esc(p.ver)+'</span>'
    +(p.repo?'<span class="repo">'+esc(p.repo)+'</span>':'')+'</div></div></div><p class="pv-d">'+esc(p.d)+'</p>'+pvGrid(p);
   return winPj}
 
