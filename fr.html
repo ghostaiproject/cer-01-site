@@ -492,7 +492,7 @@ h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--li
     <i class="txt" style="left:56.3%;top:56%;width:8%;height:13.5%;--th:48px"></i>
     <i class="txt" style="left:85.6%;top:55.2%;width:6.2%;height:13.6%;--th:44px"></i>
   </i>
-  <div class="eyebrow">// cer-01 contrôle central · 3 unités en ligne</div>
+  <div class="eyebrow">// cer-01 contrôle central · 5 unités en ligne</div>
   <h1 class="glitch">CONTRÔLE<br>CENTRAL</h1>
   <p class="lede">Chaque projet de l’équipe, son <b>build actuel</b> et un <b>tuto rapide</b> pour chacun. Ouvre une unité pour plonger dedans ; l’onglet <b>Ghostskills</b> ouvre la boîte à outils et la carte neuronale.</p>
   <div class="stats" id="hstats"></div>
@@ -949,7 +949,7 @@ paintTK();
 // ---------- main control ----------
 // units as of 2026-10-24, from each project's card and state file
 var P=[
- {no:'01',sh:[['groc-home_tiles','Home','p'],['groc-deals','Grocery deals','p'],['groc-bestrun','Best run','p'],['groc-list','List','p'],['groc-battle','Store battle','p']],n:'GrocRun',lg:'grocrun',c:'#ff2a4d',img:'var(--groc)',kind:'appli Android',repo:'ghostaiproject/Grocerierun',ver:'v5.46.2',st:'build ok',sc:'#c6ff1a',
+ {no:'01',sh:[['groc-home_tiles','Home','p'],['groc-deals','Grocery deals','p'],['groc-bestrun','Best run','p'],['groc-list','List','p'],['groc-battle','Store battle','p']],n:'GrocRun',lg:'grocrun',c:'#ff2a4d',img:'var(--groc)',kind:'appli Android',repo:'ghostaiproject/Grocerierun',ver:'v5.62.0',st:'build ok',sc:'#c6ff1a',
   d:'Planifie la tournée de courses la moins chère entre les magasins proches : promos, trajets et liste dans l’ordre de la route.',
   b:['L’arrêt le moins cher gagne : chaque arrêt chiffre un article sauté, une tournée à 3 arrêts ne perd plus contre 2 sur des suppositions.','Les tournées inutiles (plus d’arrêts, pas plus d’articles, plus cher) s’estompent avec une pastille « Pas rentable ».','Les arrêts ignorent les dépanneurs, cherchent à 30 km puis 60 km, et réessaient au lieu de bloquer sur « Recherche… ».','Un magasin de rechange doit gagner au moins un article : choisir Costco ne supprime plus l’arrêt.'],
   nv:'Pas encore vu sur un téléphone : 5.45.0, 5.46.0 et 5.46.2.',
@@ -966,7 +966,19 @@ var P=[
   b:['Cabinet : mandats avec étapes, dossier de fin d’année avec écritures de régularisation et approbations, demandes aux clients, temps et facturation, révision et calendrier.','Verrou : coffre local chiffré, Windows Hello ou verrou du téléphone d’abord, phrase secrète en secours, verrouillage après 10 min d’inactivité.','Nuage : synchro chiffrée à 3 voies dans votre propre Google Drive, panneau des conflits pour restaurer ou ignorer.','Builds : .msi/.exe Windows et .apk Android non signés depuis la CI ; look vert forêt chaud.'],
   nv:'La synchro Drive attend un client OAuth Google et n’a pas encore été essayée sur le vrai Google.',
   tu:[['open','ghostaiproject.github.io/ledger-mockup (web demo).'],['app','npx tauri build --debug --no-bundle, then run folio.exe.'],['test','npm run check runs the engine, store and app screen checks.'],['ci','.github/workflows/app.yml builds the Windows and Android apps.']],
-  cm:['#/engagements','#/yearend','npm run check','tauri build']}
+  cm:['#/engagements','#/yearend','npm run check','tauri build']},
+ {no:'04',n:'GhostTv',lg:'ghosttv',c:'#ff2abe',img:'radial-gradient(circle at 50% 45%,rgba(255,42,190,.55),transparent 55%),repeating-linear-gradient(0deg,rgba(0,0,0,.45) 0 2px,transparent 2px 4px),linear-gradient(135deg,#1a0630,#06202b)',kind:'projet télé',ver:'nouveau · 2026-11',st:'nouveau',sc:'#ff2abe',
+  d:'GhostTv : nouvelle unité, entrée dans CER-01 en novembre 2026. La portée se règle au premier /load.',
+  b:['Fiche d’unité créée : son dossier, sa fiche, jamais mêlée aux autres.','Entre dans les menus /load et /save comme unité 04.','Repo, build et écrans s’ajoutent quand le projet part.'],
+  nv:'Rien de bâti encore.',
+  tu:[['/load','Choisis GhostTv dans le menu numéroté.'],['demande','Décris ce que GhostTv doit faire ; CER-01 écrit le plan.'],['/save','Écrit l’état de la fiche. Puis nouveau chat et /load.']],
+  cm:['/load','/save']},
+ {no:'05',n:'Contrôle appareils',lg:'devices',c:'#19f0ff',img:'radial-gradient(circle at 30% 60%,rgba(25,240,255,.45),transparent 50%),repeating-linear-gradient(90deg,rgba(25,240,255,.12) 0 1px,transparent 1px 22px),repeating-linear-gradient(0deg,rgba(25,240,255,.12) 0 1px,transparent 1px 22px),linear-gradient(160deg,#04141c,#0b0420)',kind:'contrôle wifi',ver:'nouveau · 2026-11',st:'nouveau',sc:'#19f0ff',
+  d:'Contrôle les appareils sur le wifi de la maison, d’un seul endroit : lumières, prises, haut-parleurs et écrans du réseau local.',
+  b:['Fiche d’unité créée : son dossier, sa fiche, jamais mêlée aux autres.','Entre dans les menus /load et /save comme unité 05.','Appareils, repo et app s’ajoutent quand le projet part.'],
+  nv:'Rien de bâti encore.',
+  tu:[['/load','Choisis Contrôle appareils dans le menu numéroté.'],['demande','Liste les appareils à contrôler ; CER-01 écrit le plan.'],['/save','Écrit l’état de la fiche. Puis nouveau chat et /load.']],
+  cm:['/load','/save']}
 ];
 // Ghostskills is the toolbox, not a project: it lives in a quick-access tab, not in the units
 var SK={no:'tab',n:'Ghostskills',c:'#19f0ff',img:'var(--hdr)',kind:'dépôt de skills',repo:'ghostaiproject/Ghostskills',ver:'main · 14 skills',st:'en ligne',sc:'#19f0ff',map:1,
@@ -975,13 +987,13 @@ var SK={no:'tab',n:'Ghostskills',c:'#19f0ff',img:'var(--hdr)',kind:'dépôt de s
   tu:[['installer core','Une fois par personne : load, save et cmds.'],['/load','Menu numéroté des projets et de la mémoire ; réponds par un numéro.'],['/cmds','Menu numéroté : /sync, /ship, /list, /new.'],['/ship (skills)','check.ps1 -Pack, puis téléverse les zips modifiés sur claude.ai.']],
   cm:['/load','/save','/cmds','/cer','/drift']};
 function skVer(){SK.ver=(LIVE?LIVE.branch:'main')+' · '+nSk()+' skills'}skVer();
-var SLOT={no:'04',n:'Emplacement libre',c:'#c6ff1a',img:'',kind:'unité libre',ver:'/new',st:'libre',sc:'#c6ff1a',
+var SLOT={no:'06',n:'Emplacement libre',c:'#c6ff1a',img:'',kind:'unité libre',ver:'/new',st:'libre',sc:'#c6ff1a',
   d:'De la place pour le prochain projet. /cmds puis /new copie le modèle dans une nouvelle carte avec le numéro suivant.',
   b:['Chaque projet a un dossier et une carte, jamais mélangés.','La carte donne le dépôt, la branche, le fichier d’état et la livraison.','Elle rejoint seule les menus /load et /save.'],
   tu:[['/cmds','Ouvre le menu de commandes numéroté.'],['/new','Demande un nom et un dépôt, puis écrit la carte.'],['/load','La nouvelle unité est tout de suite dans le menu.']],cm:['/cmds','/new','/load']};
 var ALL=P.concat([SLOT]);
 
-function paintH(){document.getElementById('hstats').innerHTML=[['3','unités en ligne'],['5.46.2','grocrun build'],[nSk(),'skills armés'],['1','t’attend'],['0','token au repos']]
+function paintH(){document.getElementById('hstats').innerHTML=[['5','unités en ligne'],['5.62.0','grocrun build'],[nSk(),'skills armés'],['1','t’attend'],['0','token au repos']]
   .map(function(s){return '<div class="stat"><b>'+s[0]+'</b>'+s[1]+'</div>'}).join('')}
 paintH();
 
@@ -1141,7 +1153,7 @@ function mark(i){STEPS.forEach(function(li,k){li.classList.toggle('on',k===i)})}
 if(!reduce)setInterval(function(){mark(stI++%STEPS.length)},2600);
 
 // activity log (doubled so the roll loops)
-var LOG=[['2026-10-25','#b7cfa3','solva','Solva devient Folio : app Tauri avec verrou et synchro Google Drive'],['2026-10-25','#DAF1DE','solva','Joined CER-01 as unit 03: review, settable engine, calendar, guided sample'],['2026-10-24','#19f0ff','skills','Renamed edged to CER-01, call sign CER, command /cer'],['2026-10-24','#19f0ff','skills','CER-01 grows: 5 lines harvested from ghost'],
+var LOG=[['2026-11-06','#ff2abe','ghosttv','GhostTv entre dans CER-01 comme unité 04'],['2026-11-06','#19f0ff','devices','Contrôle appareils (wifi) entre dans CER-01 comme unité 05'],['2026-11-06','#ff2a4d','grocrun','GrocRun 5.62.0 : mises en page pliables (écran externe + ouvert)'],['2026-10-25','#b7cfa3','solva','Solva devient Folio : app Tauri avec verrou et synchro Google Drive'],['2026-10-25','#DAF1DE','solva','Joined CER-01 as unit 03: review, settable engine, calendar, guided sample'],['2026-10-24','#19f0ff','skills','Renamed edged to CER-01, call sign CER, command /cer'],['2026-10-24','#19f0ff','skills','CER-01 grows: 5 lines harvested from ghost'],
  ['2026-10-24','#b026ff','window','Alert run waiting for approval in Actions'],['2026-10-24','#19f0ff','skills','Every command useful: window load/ship/list, skills ship'],
  ['2026-10-23','#b026ff','window','Privacy: private home ids in the public logs'],['2026-10-23','#19f0ff','skills','Fixed menu numbers, /new, safer /sync, checker + CI'],
  ['2026-10-23','#19f0ff','skills','Added ceig: image generation through Gemini in Chrome'],['2026-10-23','#b026ff','window','Setup page: Echo and phone options grouped'],
