@@ -1083,7 +1083,7 @@ const label=n=>{const k=n.s;return n.k==='hub'?`<text data-l="${n.id}" x="${f1(n
 A.mapGraph=build;
 A.mapSvg=(g,vb)=>{const far=(a,b)=>a.gy-b.gy, P=g.P, nodes=[...g.nodes].sort(far);
   const es=g.edges.map((e,i)=>[e,i]).sort((x,y)=>(g.by[x[0][0]].gy+g.by[x[0][1]].gy)-(g.by[y[0][0]].gy+g.by[y[0][1]].gy));
-  return `<svg class="nm" viewBox="${vb||`0 0 ${W} ${g.H}`}" role="img" aria-label="Neural map of units, folders and skills">
+  return `<svg class="nm" viewBox="${vb||`0 0 ${W} ${g.H}`}" role="img" aria-label="Carte neuronale des unités, dossiers et skills">
     <defs><radialGradient id="nm-core"><stop offset="0" stop-color="#E9FEFF"/><stop offset=".45" stop-color="#19F0FF"/><stop offset="1" stop-color="#0A7F8A"/></radialGradient>
       <radialGradient id="nm-floor" cx="${f1(g.CX/W)}" cy="${f1(g.CY/g.H)}" r=".6"><stop offset="0" stop-color="#19F0FF" stop-opacity=".09"/><stop offset="1" stop-color="#19F0FF" stop-opacity="0"/></radialGradient>
       <clipPath id="nm-disc"><path d="${ring(P,RU+70,64)}"/></clipPath>
@@ -1114,9 +1114,9 @@ A.mapFire=(el,svg)=>{clearInterval(el._fire);
       l.classList.add('fire');setTimeout(()=>l.classList.remove('fire'),700)}},760)};
 // home card: hover previews, any tap opens the Map screen (focused on the tapped node)
 A.neuralMap=el=>{
-  const g=build(), cap0=`<b>CER-01</b> <span>${g.nodes.length} nodes · ${g.edges.length} links · tap to explore</span>`;
+  const g=build(), cap0=`<b>CER-01</b> <span>${g.nodes.length} nodes · ${g.edges.length} liens · touche pour explorer</span>`;
   el.innerHTML=A.mapSvg(g)+`<p class="nm-cap" id="nm-cap">${cap0}</p>`;
-  el.classList.add('nm-link');el.tabIndex=0;el.setAttribute('role','link');el.setAttribute('aria-label','Open the neural map');
+  el.classList.add('nm-link');el.tabIndex=0;el.setAttribute('role','link');el.setAttribute('aria-label','Ouvrir la carte neuronale');
   const svg=el.querySelector('svg'), cap=el.querySelector('#nm-cap');
   svg.addEventListener('pointerover',e=>{const c=e.target.closest('[data-n]');if(!c)return;const n=g.by[c.dataset.n];
     A.mapLight(svg,n.id);cap.innerHTML=`<b>${A.esc(n.t)}</b> <span>${A.esc(n.s)}</span>`});
@@ -1196,7 +1196,7 @@ A.mapGhost=(el,svg,g)=>{
 (function(){
 const A=window.App, esc=A.esc;
 let g, svg, stage, info, vb, fit, sel=null, filt='all', q='';
-const kindName={core:'core',hub:'folder',leaf:'skill',unit:'unit · project'};
+const kindName={core:'noyau',hub:'dossier',leaf:'skill',unit:'unité · projet'};
 const nbOf=id=>{const s=new Set();g.edges.forEach(([a,b])=>{if(a===id)s.add(b);if(b===id)s.add(a)});return [...s].map(x=>g.by[x])};
 // ---- viewBox camera: the box keeps the stage's aspect, so pointer maths stays linear
 function aspect(){const r=stage.getBoundingClientRect();return r.height/Math.max(1,r.width)||.6}
@@ -1219,31 +1219,31 @@ function centerOn(n){const w=n.k==='leaf'?150:n.k==='core'?fit.w:220,h=w*aspect(
 // ---- side panel
 function overview(){
   const F=window.FOLDERS,S=window.DATA.skills,U=window.UNITS;
-  info.innerHTML=`<div class="eyebrow">// overview</div><h3>CER-01 neural map</h3>
-   <p class="mp-d">Everything Ghost runs, in one picture: the <b>${U.length} units</b> (projects) on the outer ring, the <b>${Object.keys(F).length} skill folders</b> inside, and every one of the <b>${S.length} skills</b> on a branch off its folder. Lines show who calls or owns what.</p>
-   <p class="mp-h">Tap a node to read it · drag to pan · pinch, scroll or ± to zoom · double-tap to zoom in</p>
-   <div class="mp-sec">Units</div><div class="mp-list">${U.map(u=>`<button data-mpf="u:${u.id}" style="--c:${u.c}"><i></i><b>${esc(u.n)}</b><small class="${u.ok?'ok':'bad'}">${esc(u.st)}</small></button>`).join('')}</div>
-   <div class="mp-sec">Folders</div><div class="mp-list">${Object.entries(F).map(([k,f])=>`<button data-mpf="f:${k}" style="--c:${f.c}"><i></i><b>${esc(f.n)}</b><small>${S.filter(s=>s.k===k).length} skills</small></button>`).join('')}</div>`}
+  info.innerHTML=`<div class="eyebrow">// vue d’ensemble</div><h3>Carte neuronale CER-01</h3>
+   <p class="mp-d">Tout ce que Ghost fait tourner, en une image : les <b>${U.length} unités</b> (projets) sur l’anneau extérieur, les <b>${Object.keys(F).length} dossiers de skills</b> à l’intérieur, et chacun des <b>${S.length} skills</b> sur une branche de son dossier. Les lignes montrent qui appelle ou possède quoi.</p>
+   <p class="mp-h">Touche un nœud pour le lire · glisse pour déplacer · pince, molette ou ± pour zoomer · double-touche pour zoomer</p>
+   <div class="mp-sec">Unités</div><div class="mp-list">${U.map(u=>`<button data-mpf="u:${u.id}" style="--c:${u.c}"><i></i><b>${esc(u.n)}</b><small class="${u.ok?'ok':'bad'}">${esc(u.st)}</small></button>`).join('')}</div>
+   <div class="mp-sec">Dossiers</div><div class="mp-list">${Object.entries(F).map(([k,f])=>`<button data-mpf="f:${k}" style="--c:${f.c}"><i></i><b>${esc(f.n)}</b><small>${S.filter(s=>s.k===k).length} skills</small></button>`).join('')}</div>`}
 function detail(n){
   const F=window.FOLDERS, nb=nbOf(n.id);
   let d='',meta=[],act='';
   if(n.k==='leaf'){const s=window.DATA.skills.find(x=>'s:'+x.id===n.id)||{};d=A.blurb?A.blurb(s.d||''):s.d;
-    meta=[['Folder',F[s.k]?.n],['Path',(s.dir||'')+'/'],['Size',s.kb+' KB'],s.cmd&&['Command',s.cmd]];
-    act=`<button class="btn primary" data-mpo="skill:${esc(s.id)}">Open skill</button>${s.cmd?`<button class="btn" data-copy="${esc(s.cmd)}">Copy ${esc(s.cmd)}</button>`:''}`}
+    meta=[['Dossier',F[s.k]?.n],['Chemin',(s.dir||'')+'/'],['Taille',s.kb+' Ko'],s.cmd&&['Commande',s.cmd]];
+    act=`<button class="btn primary" data-mpo="skill:${esc(s.id)}">Ouvrir le skill</button>${s.cmd?`<button class="btn" data-copy="${esc(s.cmd)}">Copier ${esc(s.cmd)}</button>`:''}`}
   else if(n.k==='unit'){const u=window.UNITS.find(x=>'u:'+x.id===n.id);d=u.d;
-    meta=[['Kind',u.kind],['Version',u.ver],['Status',u.st],['Next',u.nv]];
-    act=`<button class="btn primary" data-mpo="unit:${esc(u.id)}">Open unit</button>`}
+    meta=[['Type',u.kind],['Version',u.ver],['Statut',u.st],['Ensuite',u.nv]];
+    act=`<button class="btn primary" data-mpo="unit:${esc(u.id)}">Ouvrir l’unité</button>`}
   else if(n.k==='hub'){const f=F[n.f];d=f.d;meta=[['Skills',window.DATA.skills.filter(s=>s.k===n.f).length]];
-    act=`<button class="btn" data-mpk="${esc(n.f)}">Show only ${esc(f.n)}</button>`}
-  else {d='The core: every unit and every skill folder hangs off CER-01, the crew’s shared control panel.';meta=[['Units',window.UNITS.length],['Skills',window.DATA.skills.length]]}
+    act=`<button class="btn" data-mpk="${esc(n.f)}">Voir seulement ${esc(f.n)}</button>`}
+  else {d='Le noyau : chaque unité et chaque dossier de skills part de CER-01, le panneau de contrôle partagé de l’équipe.';meta=[['Unités',window.UNITS.length],['Skills',window.DATA.skills.length]]}
   const grp=k=>nb.filter(x=>x.k===k);
   const list=(t,arr)=>arr.length?`<div class="mp-sec">${t} · ${arr.length}</div><div class="mp-chips">${arr.map(x=>`<button data-mpf="${x.id}" style="--c:${x.c}"><i></i>${esc(x.t)}</button>`).join('')}</div>`:'';
   info.innerHTML=`<div class="eyebrow" style="color:${n.c}">// ${kindName[n.k]}</div><h3>${esc(n.t)}</h3>
-   ${n.k==='unit'?`<span class="chip" style="--c:${n.ok?'var(--toxic)':'var(--blood)'}">${n.ok?'ok':'needs attention'}</span>`:''}
+   ${n.k==='unit'?`<span class="chip" style="--c:${n.ok?'var(--toxic)':'var(--blood)'}">${n.ok?'ok':'à surveiller'}</span>`:''}
    <p class="mp-d">${esc(d||'')}</p>
    <dl class="mp-meta">${meta.filter(m=>m&&m[1]!=null&&m[1]!=='').map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(String(v))}</dd>`).join('')}</dl>
-   <div class="mp-act">${act}<button class="btn ghost" data-mpf="">Back to overview</button></div>
-   ${list('Units',grp('unit'))}${list('Folders',grp('hub').concat(grp('core')))}${list('Skills',grp('leaf'))}`}
+   <div class="mp-act">${act}<button class="btn ghost" data-mpf="">Retour à la vue d’ensemble</button></div>
+   ${list('Unités',grp('unit'))}${list('Dossiers',grp('hub').concat(grp('core')))}${list('Skills',grp('leaf'))}`}
 // ---- selection, filter, search
 function focus(id,move){sel=id&&g.by[id]?id:null;A.mapLight(svg,sel);
   if(sel){detail(g.by[sel]);if(move!==false)centerOn(g.by[sel])}else{overview();if(move!==false)home()}
@@ -1255,7 +1255,7 @@ function applyFilter(){const t=q.trim().toLowerCase();
   svg.querySelectorAll('[data-l]').forEach(c=>c.classList.toggle('dim',!K.has(c.dataset.l)));
   svg.querySelectorAll('[data-e]').forEach(l=>l.classList.toggle('dim',!(K.has(l.dataset.a)&&K.has(l.dataset.b))));
   document.querySelectorAll('#s-map [data-mpk]').forEach(b=>b.setAttribute('aria-pressed',String(!t&&b.dataset.mpk===filt)));
-  const n=document.getElementById('mp-n');if(n)n.textContent=t?`${K.size} match${K.size===1?'':'es'}`:'';return K}
+  const n=document.getElementById('mp-n');if(n)n.textContent=t?`${K.size} résultat${K.size===1?'':'s'}`:'';return K}
 // ---- gestures: one pointer pans, two pinch; a still tap selects
 function gestures(){const P=new Map();let moved=false,pinch=0,downT=null,lastTap=0;
   const rel=e=>{const r=stage.getBoundingClientRect();return [(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]};
@@ -1277,11 +1277,11 @@ function gestures(){const P=new Map();let moved=false,pinch=0,downT=null,lastTap
   svg.addEventListener('keydown',e=>{const c=e.target.closest('[data-n]');if(c&&(e.key==='Enter'||e.key===' ')){e.preventDefault();focus(c.dataset.n)}})}
 function screen(el){
   const F=window.FOLDERS;
-  el.innerHTML=`   <div class="mp-bar"><input id="mp-q" type="search" placeholder="Find a skill, folder or unit…" aria-label="Search the map" autocomplete="off"><span id="mp-n" class="mp-n"></span>
-    <div class="mp-chips" role="group" aria-label="Filter"><button data-mpk="all">All</button><button data-mpk="units">Units</button>${Object.entries(F).map(([k,f])=>`<button data-mpk="${k}" style="--c:${f.c}"><i></i>${esc(f.n)}</button>`).join('')}</div></div>
+  el.innerHTML=`   <div class="mp-bar"><input id="mp-q" type="search" placeholder="Trouve un skill, dossier ou unité…" aria-label="Chercher dans la carte" autocomplete="off"><span id="mp-n" class="mp-n"></span>
+    <div class="mp-chips" role="group" aria-label="Filtre"><button data-mpk="all">Tout</button><button data-mpk="units">Unités</button>${Object.entries(F).map(([k,f])=>`<button data-mpk="${k}" style="--c:${f.c}"><i></i>${esc(f.n)}</button>`).join('')}</div></div>
    <div class="mp"><div class="mp-stage" id="mp-stage"><svg></svg>
-     <div class="mp-zoom"><button class="ibtn" data-mpz="in" aria-label="Zoom in">+</button><button class="ibtn" data-mpz="out" aria-label="Zoom out">−</button><button class="ibtn" data-mpz="fit" aria-label="Fit the whole map">⤢</button></div>
-     <p class="mp-leg"><span><i class="u"></i>unit</span><span><i class="h"></i>folder</span><span><i class="l"></i>skill</span><span><i class="o"></i>owns</span></p></div>
+     <div class="mp-zoom"><button class="ibtn" data-mpz="in" aria-label="Zoom avant">+</button><button class="ibtn" data-mpz="out" aria-label="Zoom arrière">−</button><button class="ibtn" data-mpz="fit" aria-label="Voir toute la carte">⤢</button></div>
+     <p class="mp-leg"><span><i class="u"></i>unité</span><span><i class="h"></i>dossier</span><span><i class="l"></i>skill</span><span><i class="o"></i>possède</span></p></div>
     <aside class="mp-info card" id="mp-info" aria-live="polite"></aside></div>`;
   stage=el.querySelector('#mp-stage');info=el.querySelector('#mp-info');
   // layout shaped like the stage (square on phones), then the svg goes in
@@ -1308,7 +1308,7 @@ var nmEl=document.getElementById('s-map');
 window.nmPaint=function(){if(!nmEl)return;nmData();clearInterval(nmEl._fire);var st=nmEl.querySelector('#mp-stage');if(st)clearInterval(st._fire);App.screens.map(nmEl)};
 nmPaint();
 document.addEventListener('click',function(e){var b=e.target.closest('#s-map [data-copy]');if(!b)return;
-  try{navigator.clipboard.writeText(b.dataset.copy);var t=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=t},1200)}catch(x){}});
+  try{navigator.clipboard.writeText(b.dataset.copy);var t=b.textContent;b.textContent='copié';setTimeout(function(){b.textContent=t},1200)}catch(x){}});
 
 // topbar uptime
 var t00=Date.now(),upEl=document.getElementById('up');
