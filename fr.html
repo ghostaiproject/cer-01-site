@@ -974,11 +974,11 @@ var P=[
   nv:'Le tuto et le zip v1.0.0 sont publics, donc le clip télé et les captures de la pièce aussi.',
   tu:[['/load ghosttv','Ouvre la fiche et HANDOFF.md.'],['firetv.ps1 go <keys>','Envoie des touches, renvoie une petite capture.'],['firetv.ps1 run watch-apps','Rejoue un chemin de touches sauvé.'],['/save','Écrit HANDOFF.md, puis nouveau chat.']],
   cm:['/load ghosttv','firetv.ps1 go','firetv.ps1 run','/save']},
- {no:'05',n:'Contrôle maison',lg:'home',c:'#ff9a1a',img:'radial-gradient(circle at 30% 60%,rgba(255,154,26,.45),transparent 50%),repeating-linear-gradient(90deg,rgba(255,154,26,.12) 0 1px,transparent 1px 22px),repeating-linear-gradient(0deg,rgba(255,154,26,.12) 0 1px,transparent 1px 22px),linear-gradient(160deg,#1c0d04,#0b0420)',kind:'adb par wifi',ver:'nouveau · 2026-11',st:'nouveau',sc:'#ff9a1a',
+ {no:'05',n:'ADB agent HC',lg:'home',c:'#ff9a1a',img:'radial-gradient(circle at 30% 60%,rgba(255,154,26,.45),transparent 50%),repeating-linear-gradient(90deg,rgba(255,154,26,.12) 0 1px,transparent 1px 22px),repeating-linear-gradient(0deg,rgba(255,154,26,.12) 0 1px,transparent 1px 22px),linear-gradient(160deg,#1c0d04,#0b0420)',kind:'adb par wifi',ver:'nouveau · 2026-11',st:'nouveau',sc:'#ff9a1a',
   d:'Claude contrôle les appareils du wifi de la maison par adb (débogage sans fil) : téléphones, tablettes, télés et clés, d’un seul chat.',
   b:['Une unité pour chaque appareil adb du réseau maison, style GhostTv.','On jumelle une fois par wifi, puis Claude envoie des touches, ouvre des apps et prend des captures.','Son dossier, sa fiche ; entre dans les menus /load et /save comme unité 05.'],
   nv:'Rien de bâti encore : liste d’appareils, jumelage et repo à venir.',
-  tu:[['/load','Choisis Contrôle maison dans le menu numéroté.'],['jumeler','Active le débogage sans fil sur l’appareil, jumelle-le au PC.'],['demande','Dis à Claude quoi faire sur quel appareil.'],['/save','Écrit l’état de la fiche, puis nouveau chat.']],
+  tu:[['/load','Choisis ADB agent HC dans le menu numéroté.'],['jumeler','Active le débogage sans fil sur l’appareil, jumelle-le au PC.'],['demande','Dis à Claude quoi faire sur quel appareil.'],['/save','Écrit l’état de la fiche, puis nouveau chat.']],
   cm:['/load','adb pair','adb connect','/save']}
 ];
 // Ghostskills is the toolbox, not a project: it lives in a quick-access tab, not in the units
@@ -994,12 +994,14 @@ var SLOT={no:'06',n:'Emplacement libre',c:'#c6ff1a',img:'',kind:'unité libre',v
   tu:[['/cmds','Ouvre le menu de commandes numéroté.'],['/new','Demande un nom et un dépôt, puis écrit la carte.'],['/load','La nouvelle unité est tout de suite dans le menu.']],cm:['/cmds','/new','/load']};
 var ALL=P.concat([SLOT]);
 
-function paintH(){document.getElementById('hstats').innerHTML=[['5','unités en ligne'],['5.62.0','grocrun build'],[nSk(),'skills armés'],['1','t’attend'],['0','token au repos']]
+var UV='5.62.0';
+function paintH(){document.getElementById('hstats').innerHTML=[[P.length,'unités en ligne'],[UV,'grocrun build'],[nSk(),'skills armés'],[P.filter(function(p){return p.ok===false||p.sc==='#ff2a4d'}).length,'t’attend'],['0','token au repos']]
   .map(function(s){return '<div class="stat"><b>'+s[0]+'</b>'+s[1]+'</div>'}).join('')}
 paintH();
 
 function picStyle(p){return p.img?'--img:'+p.img+(p.bp?';--bp:'+p.bp+';--bs:'+p.bs:''):'--img:none'}
 var prj=document.getElementById('projects');
+function paintP(){
 prj.innerHTML=ALL.map(function(p,i){var slot=p===SLOT;
   return '<article class="proj'+(slot?' slot':'')+'" style="--c:'+p.c+'" data-i="'+i+'"><div class="pic" style="'+picStyle(p)+'">'+(slot?'+':'<i></i>')
    +'<span class="chip" style="--s:'+p.sc+'">'+esc(p.st)+'</span><span class="pno">unité '+p.no+'</span></div>'
@@ -1013,6 +1015,28 @@ prj.innerHTML=ALL.map(function(p,i){var slot=p===SLOT;
   a.onmousemove=function(e){var r=a.getBoundingClientRect();a.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*10+'deg');a.style.setProperty('--rx',-((e.clientY-r.top)/r.height-.5)*8+'deg')};
   a.onmouseleave=function(){a.style.setProperty('--ry','0deg');a.style.setProperty('--rx','0deg')};
 });
+}
+paintP();
+
+// live units (2026-11-06): the same data.json the CER-01 app reads (cer01-releases, rebuilt every 30 min by sync.yml).
+// Versions and status come live; a unit added in units.json shows here without editing this page.
+(function(){var IDS={grocrun:'grocrun',window:'window',solva:'folio',ghosttv:'ghosttv',home:'home'};
+P.forEach(function(p){p.id=p.id||IDS[p.lg]||p.lg});
+var FR=true,ST={'build ok':'build ok','needs approval':'à approuver','build failed':'build raté','live':'en ligne','new':'nouveau','in progress':'en cours','alerts on':'alertes actives'};
+fetch('https://raw.githubusercontent.com/ghostaiproject/cer01-releases/main/data.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(d){
+  if(!d||!d.units||!d.units.length)return;
+  d.units.forEach(function(u){var p=P.filter(function(x){return x.id===u.id})[0];
+    var st=FR?(ST[u.st]||u.st):u.st;
+    if(!p){p={no:u.no,id:u.id,n:u.n,lg:u.id,c:u.c,img:u.img?'url('+u.img+')':'',kind:u.kind,repo:u.repo,ver:u.ver,st:st,d:u.d,b:u.b||[],nv:u.nv,tu:u.tu||[],cm:(u.tu||[]).map(function(t){return t[0]}).filter(function(c){return c[0]==='/'})};P.push(p)}
+    else{p.ver=u.ver||p.ver;p.st=st||p.st;if(!FR&&u.n)p.n=u.n;if(FR&&u.n&&u.n.indexOf('ADB')===0)p.n=u.n}
+    p.ok=u.ok!==false;p.sc=p.ok?(p.sc==='#ff2a4d'?'#c6ff1a':p.sc):'#ff2a4d'});
+  P.sort(function(a,b){return a.no<b.no?-1:1});
+  var n=P.length;SLOT.no=(n+1<10?'0':'')+(n+1);ALL=P.concat([SLOT]);
+  if(d.uver&&d.uver.grocrun)UV=d.uver.grocrun.replace(/^v/,'');
+  var e=document.querySelector('.eyebrow');if(e)e.textContent=e.textContent.replace(/\d+ (units online|unités en ligne)/,function(m,w){return n+' '+w});
+  paintH();paintP();
+}).catch(function(){});
+})();
 
 // build + tuto boxes, shared by every unit view
 function pvGrid(p){
@@ -1154,7 +1178,7 @@ function mark(i){STEPS.forEach(function(li,k){li.classList.toggle('on',k===i)})}
 if(!reduce)setInterval(function(){mark(stI++%STEPS.length)},2600);
 
 // activity log (doubled so the roll loops)
-var LOG=[['2026-11-06','#ff2abe','ghosttv','GhostTv v1.0.0 sur le site : contrôle Fire TV + télé Samsung par adb'],['2026-11-06','#ff9a1a','home','Contrôle maison entre dans CER-01 comme unité 05 : Claude pilote les appareils wifi par adb'],['2026-11-06','#ff2a4d','grocrun','GrocRun 5.62.0 : mises en page pliables (écran externe + ouvert)'],['2026-10-25','#b7cfa3','solva','Solva devient Folio : app Tauri avec verrou et synchro Google Drive'],['2026-10-25','#DAF1DE','solva','Joined CER-01 as unit 03: review, settable engine, calendar, guided sample'],['2026-10-24','#19f0ff','skills','Renamed edged to CER-01, call sign CER, command /cer'],['2026-10-24','#19f0ff','skills','CER-01 grows: 5 lines harvested from ghost'],
+var LOG=[['2026-11-06','#ff2abe','ghosttv','GhostTv v1.0.0 sur le site : contrôle Fire TV + télé Samsung par adb'],['2026-11-06','#ff9a1a','home','ADB agent HC entre dans CER-01 comme unité 05 : Claude pilote les appareils wifi par adb'],['2026-11-06','#ff2a4d','grocrun','GrocRun 5.62.0 : mises en page pliables (écran externe + ouvert)'],['2026-10-25','#b7cfa3','solva','Solva devient Folio : app Tauri avec verrou et synchro Google Drive'],['2026-10-25','#DAF1DE','solva','Joined CER-01 as unit 03: review, settable engine, calendar, guided sample'],['2026-10-24','#19f0ff','skills','Renamed edged to CER-01, call sign CER, command /cer'],['2026-10-24','#19f0ff','skills','CER-01 grows: 5 lines harvested from ghost'],
  ['2026-10-24','#b026ff','window','Alert run waiting for approval in Actions'],['2026-10-24','#19f0ff','skills','Every command useful: window load/ship/list, skills ship'],
  ['2026-10-23','#b026ff','window','Privacy: private home ids in the public logs'],['2026-10-23','#19f0ff','skills','Fixed menu numbers, /new, safer /sync, checker + CI'],
  ['2026-10-23','#19f0ff','skills','Added ceig: image generation through Gemini in Chrome'],['2026-10-23','#b026ff','window','Setup page: Echo and phone options grouped'],

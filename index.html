@@ -974,11 +974,11 @@ var P=[
   nv:'Tuto and the v1.0.0 zip are public, so the TV clip and room screenshots are too.',
   tu:[['/load ghosttv','Opens the card and HANDOFF.md.'],['firetv.ps1 go <keys>','Sends keys, returns a small screenshot.'],['firetv.ps1 run watch-apps','Replays a saved key path.'],['/save','Writes HANDOFF.md, then a fresh chat.']],
   cm:['/load ghosttv','firetv.ps1 go','firetv.ps1 run','/save']},
- {no:'05',n:'Home Control',lg:'home',c:'#ff9a1a',img:'radial-gradient(circle at 30% 60%,rgba(255,154,26,.45),transparent 50%),repeating-linear-gradient(90deg,rgba(255,154,26,.12) 0 1px,transparent 1px 22px),repeating-linear-gradient(0deg,rgba(255,154,26,.12) 0 1px,transparent 1px 22px),linear-gradient(160deg,#1c0d04,#0b0420)',kind:'adb over wifi',ver:'new · 2026-11',st:'new',sc:'#ff9a1a',
+ {no:'05',n:'ADB agent HC',lg:'home',c:'#ff9a1a',img:'radial-gradient(circle at 30% 60%,rgba(255,154,26,.45),transparent 50%),repeating-linear-gradient(90deg,rgba(255,154,26,.12) 0 1px,transparent 1px 22px),repeating-linear-gradient(0deg,rgba(255,154,26,.12) 0 1px,transparent 1px 22px),linear-gradient(160deg,#1c0d04,#0b0420)',kind:'adb over wifi',ver:'new · 2026-11',st:'new',sc:'#ff9a1a',
   d:'Claude controls the devices on the home wifi over adb (wireless debugging): phones, tablets, TVs and sticks, from one chat.',
   b:['One unit for every adb device on the home network, GhostTv style.','Pair once over wifi, then Claude sends keys, opens apps and takes screenshots.','Own folder, own card; joins the /load and /save menus as unit 05.'],
   nv:'Nothing built yet: device list, pairing and repo come next.',
-  tu:[['/load','Pick Home Control in the numbered menu.'],['pair','Turn on wireless debugging on the device, pair it with the PC.'],['ask','Tell Claude what to do on which device.'],['/save','Writes the card state, then a fresh chat.']],
+  tu:[['/load','Pick ADB agent HC in the numbered menu.'],['pair','Turn on wireless debugging on the device, pair it with the PC.'],['ask','Tell Claude what to do on which device.'],['/save','Writes the card state, then a fresh chat.']],
   cm:['/load','adb pair','adb connect','/save']}
 ];
 // Ghostskills is the toolbox, not a project: it lives in a quick-access tab, not in the units
@@ -994,12 +994,14 @@ var SLOT={no:'06',n:'Empty slot',c:'#c6ff1a',img:'',kind:'free unit',ver:'/new',
   tu:[['/cmds','Opens the numbered command menu.'],['/new','Asks for a name and a repo, then writes the card.'],['/load','The new unit is in the menu right away.']],cm:['/cmds','/new','/load']};
 var ALL=P.concat([SLOT]);
 
-function paintH(){document.getElementById('hstats').innerHTML=[['5','units online'],['5.62.0','grocrun build'],[nSk(),'skills armed'],['1','needs you'],['0','idle tokens']]
+var UV='5.62.0';
+function paintH(){document.getElementById('hstats').innerHTML=[[P.length,'units online'],[UV,'grocrun build'],[nSk(),'skills armed'],[P.filter(function(p){return p.ok===false||p.sc==='#ff2a4d'}).length,'needs you'],['0','idle tokens']]
   .map(function(s){return '<div class="stat"><b>'+s[0]+'</b>'+s[1]+'</div>'}).join('')}
 paintH();
 
 function picStyle(p){return p.img?'--img:'+p.img+(p.bp?';--bp:'+p.bp+';--bs:'+p.bs:''):'--img:none'}
 var prj=document.getElementById('projects');
+function paintP(){
 prj.innerHTML=ALL.map(function(p,i){var slot=p===SLOT;
   return '<article class="proj'+(slot?' slot':'')+'" style="--c:'+p.c+'" data-i="'+i+'"><div class="pic" style="'+picStyle(p)+'">'+(slot?'+':'<i></i>')
    +'<span class="chip" style="--s:'+p.sc+'">'+esc(p.st)+'</span><span class="pno">unit '+p.no+'</span></div>'
@@ -1013,6 +1015,28 @@ prj.innerHTML=ALL.map(function(p,i){var slot=p===SLOT;
   a.onmousemove=function(e){var r=a.getBoundingClientRect();a.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*10+'deg');a.style.setProperty('--rx',-((e.clientY-r.top)/r.height-.5)*8+'deg')};
   a.onmouseleave=function(){a.style.setProperty('--ry','0deg');a.style.setProperty('--rx','0deg')};
 });
+}
+paintP();
+
+// live units (2026-11-06): the same data.json the CER-01 app reads (cer01-releases, rebuilt every 30 min by sync.yml).
+// Versions and status come live; a unit added in units.json shows here without editing this page.
+(function(){var IDS={grocrun:'grocrun',window:'window',solva:'folio',ghosttv:'ghosttv',home:'home'};
+P.forEach(function(p){p.id=p.id||IDS[p.lg]||p.lg});
+var FR=false,ST={'build ok':'build ok','needs approval':'à approuver','build failed':'build raté','live':'en ligne','new':'nouveau','in progress':'en cours','alerts on':'alertes actives'};
+fetch('https://raw.githubusercontent.com/ghostaiproject/cer01-releases/main/data.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(d){
+  if(!d||!d.units||!d.units.length)return;
+  d.units.forEach(function(u){var p=P.filter(function(x){return x.id===u.id})[0];
+    var st=FR?(ST[u.st]||u.st):u.st;
+    if(!p){p={no:u.no,id:u.id,n:u.n,lg:u.id,c:u.c,img:u.img?'url('+u.img+')':'',kind:u.kind,repo:u.repo,ver:u.ver,st:st,d:u.d,b:u.b||[],nv:u.nv,tu:u.tu||[],cm:(u.tu||[]).map(function(t){return t[0]}).filter(function(c){return c[0]==='/'})};P.push(p)}
+    else{p.ver=u.ver||p.ver;p.st=st||p.st;if(!FR&&u.n)p.n=u.n;if(FR&&u.n&&u.n.indexOf('ADB')===0)p.n=u.n}
+    p.ok=u.ok!==false;p.sc=p.ok?(p.sc==='#ff2a4d'?'#c6ff1a':p.sc):'#ff2a4d'});
+  P.sort(function(a,b){return a.no<b.no?-1:1});
+  var n=P.length;SLOT.no=(n+1<10?'0':'')+(n+1);ALL=P.concat([SLOT]);
+  if(d.uver&&d.uver.grocrun)UV=d.uver.grocrun.replace(/^v/,'');
+  var e=document.querySelector('.eyebrow');if(e)e.textContent=e.textContent.replace(/\d+ (units online|unités en ligne)/,function(m,w){return n+' '+w});
+  paintH();paintP();
+}).catch(function(){});
+})();
 
 // build + tuto boxes, shared by every unit view
 function pvGrid(p){
@@ -1154,7 +1178,7 @@ function mark(i){STEPS.forEach(function(li,k){li.classList.toggle('on',k===i)})}
 if(!reduce)setInterval(function(){mark(stI++%STEPS.length)},2600);
 
 // activity log (doubled so the roll loops)
-var LOG=[['2026-11-06','#ff2abe','ghosttv','GhostTv v1.0.0 on the site: Fire TV + Samsung TV control over adb'],['2026-11-06','#ff9a1a','home','Home Control joined CER-01 as unit 05: Claude drives wifi devices over adb'],['2026-11-06','#ff2a4d','grocrun','GrocRun 5.62.0: foldable layouts (cover + open)'],['2026-10-25','#b7cfa3','solva','Solva is now Folio: Tauri app with lock and Google Drive sync'],['2026-10-25','#DAF1DE','solva','Joined CER-01 as unit 03: review, settable engine, calendar, guided sample'],['2026-10-24','#19f0ff','skills','Renamed edged to CER-01, call sign CER, command /cer'],['2026-10-24','#19f0ff','skills','CER-01 grows: 5 lines harvested from ghost'],
+var LOG=[['2026-11-06','#ff2abe','ghosttv','GhostTv v1.0.0 on the site: Fire TV + Samsung TV control over adb'],['2026-11-06','#ff9a1a','home','ADB agent HC joined CER-01 as unit 05: Claude drives wifi devices over adb'],['2026-11-06','#ff2a4d','grocrun','GrocRun 5.62.0: foldable layouts (cover + open)'],['2026-10-25','#b7cfa3','solva','Solva is now Folio: Tauri app with lock and Google Drive sync'],['2026-10-25','#DAF1DE','solva','Joined CER-01 as unit 03: review, settable engine, calendar, guided sample'],['2026-10-24','#19f0ff','skills','Renamed edged to CER-01, call sign CER, command /cer'],['2026-10-24','#19f0ff','skills','CER-01 grows: 5 lines harvested from ghost'],
  ['2026-10-24','#b026ff','window','Alert run waiting for approval in Actions'],['2026-10-24','#19f0ff','skills','Every command useful: window load/ship/list, skills ship'],
  ['2026-10-23','#b026ff','window','Privacy: private home ids in the public logs'],['2026-10-23','#19f0ff','skills','Fixed menu numbers, /new, safer /sync, checker + CI'],
  ['2026-10-23','#19f0ff','skills','Added ceig: image generation through Gemini in Chrome'],['2026-10-23','#b026ff','window','Setup page: Echo and phone options grouped'],
